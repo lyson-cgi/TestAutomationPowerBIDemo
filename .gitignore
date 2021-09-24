@@ -1,0 +1,7 @@
+venv/
+assets/
+.idea/
+__pycache__/
+logfile.log
+report.html
+
