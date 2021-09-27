@@ -20,27 +20,22 @@ class BaseClass:
         return logger
 
     def getTestData(self, test_case_id):
-        book = openpyxl.load_workbook("C:\\Users\\Ly-sonLe\\Documents\\Github.com\\AutomateTestPowerBI\\utilities\\test_data.xlsx")
+        book = openpyxl.load_workbook("C:\\Users\\ly-son.le\\Documents\\GitHub\\TestAutomationPowerBI\\utilities\\test_data.xlsx")
         book.active = 0 # first worksheet
         sheet = book.active
-        print("Sheet Title:", sheet.title)
-        print("Test Case ID: ", test_case_id)
-        print("Max Row:", sheet.max_row)
-        print("Max Column:", sheet.max_column)
+        # print("Sheet Title:", sheet.title)
+        # print("Test Case ID: ", test_case_id)
+        # print("Max Row:", sheet.max_row)
+        # print("Max Column:", sheet.max_column)
 
         Dict = {}
-        curLabel = sheet.cell(row=1, column=2).value
-        curVal = sheet.cell(row=2, column=2).value
-        print("value ", curVal)
-        print("label ", curLabel)
 
         for i in range(2, sheet.max_row+1):  # to get rows
-            curLabel = sheet.cell(row=i-1, column=2).value
-            curVal = sheet.cell(row=i, column=2).value
-            curTestCase = sheet.cell(row=i, column=1).value
             if sheet.cell(row=i, column=1).value == test_case_id:
-
-                for j in range(2, sheet.max_column+1): # get column
-                    print("inside test case")
-                    Dict[sheet.cell(row=i-1, column=j).value] = sheet.cell(row=i, column=j).value
+               _name = sheet.cell(row=i, column=2).value
+               _value = sheet.cell(row=i, column=3).value
+               Dict[_name] = _value
         return Dict
+
+    def getValue(self, dict, name):
+        return dict[name]

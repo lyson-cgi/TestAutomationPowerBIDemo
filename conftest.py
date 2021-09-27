@@ -4,7 +4,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
+driver = None
+userLoggedIn = False
 import time
 def pytest_addoption(parser):
     parser.addoption(
@@ -13,6 +14,8 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope="class")
 def setup(request):
+    global driver
+    global userLoggedIn
     browser_name = request.config.getoption("browser_name")
     print("browser name:", browser_name)
     if browser_name == "chrome":
@@ -23,20 +26,33 @@ def setup(request):
         driver = webdriver.Edge(executable_path="c:\\webdriver\\msedgedriver.exe")
     else:
         driver = webdriver.Chrome(executable_path="c:\\webdriver\\chromedriver.exe")
+    if not userLoggedIn:
+        driver.get("https://app.powerbi.com/groups/4af14a54-e4b2-46c3-83ab-ea11cc636a7a/reports/37d98bec-e44a-46c5-8096-3a83d4ed1e99/ReportSection0fe5bb62de4b8ad15778")
 
-    driver.get("https://app.powerbi.com/groups/4af14a54-e4b2-46c3-83ab-ea11cc636a7a/reports/37d98bec-e44a-46c5-8096-3a83d4ed1e99/ReportSection0fe5bb62de4b8ad15778")
 
-    print("Sign In with Two Factor Authentication")
+        print("Sign In with Two Factor Authentication")
 
-    element = WebDriverWait(driver, 30).until(EC.presence_of_element_located(
+        element = WebDriverWait(driver, 30).until(EC.presence_of_element_located(
                 (By.XPATH, "//*[@id='mainContent']/section[1]/div[3]/div/a")))
-    element.click() # Power BI SIGN IN button
+        element.click() # Power BI SIGN IN button
+        time.sleep(3)  # give user time to response on phone
 
-    driver.find_element_by_name("loginfmt").send_keys("ly-son.le@cgi.com")
-    time.sleep(1)
-    driver.find_element_by_id("idSIButton9").click()  # Next button
-    time.sleep(30)  # give user time to response on phone
+        driver.find_element_by_name("loginfmt").send_keys("ly-son.le@cgi.com")
+        time.sleep(1)
+        driver.find_element_by_id("idSIButton9").click()  # Next button
+
+        time.sleep(30)  # give user time to response on phone
+
+
+        #WebDriverWait(driver, 15).until(EC.presence_of_element_located(
+        #        (By.ID, "idSIButton9"))).click()  # Yes button
+        # driver.find_element_by_id("idSIButton9").click()  # Next button
+        #time.sleep(30)
+        userLoggedIn = True
+        driver.maximize_window()
+
     request.cls.driver = driver  # class driver
+
     print("Yield Started")
     yield
     print("Yield Ended")
