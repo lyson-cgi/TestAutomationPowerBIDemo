@@ -6,7 +6,7 @@ import openpyxl
 import os
 from dotenv import load_dotenv
 
-# This BaseClass need to have the knowledge of setup which is define in the conftest.py
+# This BaseClass need to have the knowledge of setup which is defined in the conftest.py
 @pytest.mark.usefixtures("setup")
 class BaseClass:
     def getLogger(self):
