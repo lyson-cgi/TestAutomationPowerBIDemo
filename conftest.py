@@ -3,6 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import os
+from dotenv import load_dotenv
 
 driver = None
 userLoggedIn = False
@@ -18,16 +20,22 @@ def setup(request):
     global userLoggedIn
     browser_name = request.config.getoption("browser_name")
     print("browser name:", browser_name)
+    load_dotenv()
+    WEBDRIVER_PATH = os.getenv('WEBDRIVER_PATH')
+    POWERBI_URL = os.getenv('POWERBI_URL')
+
     if browser_name == "chrome":
-        driver = webdriver.Chrome(executable_path="c:\\webdriver\\chromedriver_win32_94.0.4606\\chromedriver.exe")
+        # driver = webdriver.Chrome(executable_path="c:\\webdriver\\chromedriver.exe")
+        driver = webdriver.Chrome(executable_path=WEBDRIVER_PATH + "\\chromedriver.exe")
     elif browser_name == "firefox":
-        driver = webdriver.Firefox(executable_path="c:\\webdriver\\geckodriver.exe")
+        driver = webdriver.Firefox(executable_path=WEBDRIVER_PATH + "\\geckodriver.exe")
     elif browser_name == "edge":
-        driver = webdriver.Edge(executable_path="c:\\webdriver\\msedgedriver.exe")
+        driver = webdriver.Edge(executable_path=WEBDRIVER_PATH + "\\msedgedriver.exe")
     else:
-        driver = webdriver.Chrome(executable_path="c:\\webdriver\\chromedriver.exe")
+        driver = webdriver.Chrome(executable_path=WEBDRIVER_PATH + "\\chromedriver.exe")
     if not userLoggedIn:
-        driver.get("https://app.powerbi.com/groups/4af14a54-e4b2-46c3-83ab-ea11cc636a7a/reports/37d98bec-e44a-46c5-8096-3a83d4ed1e99/ReportSection0fe5bb62de4b8ad15778")
+        #driver.get("https://app.powerbi.com/groups/4af14a54-e4b2-46c3-83ab-ea11cc636a7a/reports/37d98bec-e44a-46c5-8096-3a83d4ed1e99/ReportSection0fe5bb62de4b8ad15778")
+        driver.get(POWERBI_URL)
 
 
         print("Sign In with Two Factor Authentication")
@@ -41,7 +49,7 @@ def setup(request):
         time.sleep(1)
         driver.find_element_by_id("idSIButton9").click()  # Next button
 
-        time.sleep(30)  # give user time to response on phone
+        time.sleep(25)  # give user time to response on phone
 
 
         #WebDriverWait(driver, 15).until(EC.presence_of_element_located(
