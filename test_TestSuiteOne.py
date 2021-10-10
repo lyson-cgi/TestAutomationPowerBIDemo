@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from utilities.BaseClass import BaseClass
 import time
 import pytest
+from pageObjects.NoWMineTypeRegionPage import NoWMineTypeRegionPage
 
 # Extend TestOne Class to inherit the BaseClass
 # @pytest.mark.usefixtures("setup")
@@ -17,6 +18,7 @@ class TestSuiteOne(BaseClass):
     #        log.error("Could not find website")
     #    finally:
     #        log.info("test_OpenWebsite ended")
+
 
     def test_TestCase01(self):
         log = self.getLogger()
@@ -95,3 +97,8 @@ class TestSuiteOne(BaseClass):
         log.info("checking for report title 10")
         value = self.getValue(self.getTestData("Testcase12"), 'report_title')
         assert value in self.driver.page_source
+
+
+    def test_TestCase21(self):
+        page2Object = NoWMineTypeRegionPage(self.driver)
+        page2Object.test_Testcase21()
