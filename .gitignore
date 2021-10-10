@@ -4,4 +4,5 @@ assets/
 __pycache__/
 logfile.log
 report.html
+.env
 

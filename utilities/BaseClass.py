@@ -2,6 +2,10 @@ import logging
 import inspect
 import pytest
 import openpyxl
+
+import os
+from dotenv import load_dotenv
+
 # This BaseClass need to have the knowledge of setup which is define in the conftest.py
 @pytest.mark.usefixtures("setup")
 class BaseClass:
@@ -20,10 +24,14 @@ class BaseClass:
         return logger
 
     def getTestData(self, test_case_id):
-        book = openpyxl.load_workbook("C:\\Users\\ly-son.le\\Documents\\GitHub\\TestAutomationPowerBI\\utilities\\test_data.xlsx")
+        load_dotenv()
+        TEST_DATA_FILE_PATH = os.getenv('XLS_TEST_DATA_PATH')
+        print("WORKBOOK: ", TEST_DATA_FILE_PATH)
+        book = openpyxl.load_workbook(TEST_DATA_FILE_PATH)
+        # book = openpyxl.load_workbook("C:\\Users\\Ly-sonLe\\Documents\\Github.com\\TestAutomationPowerBI\\utilities\\test_data.xlsx")
         book.active = 0 # first worksheet
         sheet = book.active
-        # print("Sheet Title:", sheet.title)
+        print("Sheet Title:", sheet.title)
         # print("Test Case ID: ", test_case_id)
         # print("Max Row:", sheet.max_row)
         # print("Max Column:", sheet.max_column)

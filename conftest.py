@@ -19,7 +19,7 @@ def setup(request):
     browser_name = request.config.getoption("browser_name")
     print("browser name:", browser_name)
     if browser_name == "chrome":
-        driver = webdriver.Chrome(executable_path="c:\\webdriver\\chromedriver.exe")
+        driver = webdriver.Chrome(executable_path="c:\\webdriver\\chromedriver_win32_94.0.4606\\chromedriver.exe")
     elif browser_name == "firefox":
         driver = webdriver.Firefox(executable_path="c:\\webdriver\\geckodriver.exe")
     elif browser_name == "edge":
