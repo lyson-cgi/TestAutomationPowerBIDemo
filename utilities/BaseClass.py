@@ -6,6 +6,10 @@ import openpyxl
 import os
 from dotenv import load_dotenv
 
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 # This BaseClass need to have the knowledge of setup which is define in the conftest.py
 @pytest.mark.usefixtures("setup")
 class BaseClass:
@@ -42,8 +46,24 @@ class BaseClass:
             if sheet.cell(row=i, column=1).value == test_case_id:
                _name = sheet.cell(row=i, column=2).value
                _value = sheet.cell(row=i, column=3).value
+               _assert_value = sheet.cell(row=i, column=4).value
+               # print("asserut_value:", _assert_value)
                Dict[_name] = _value
+               Dict['assert_name'] = _assert_value
+
         return Dict
 
     def getValue(self, dict, name):
         return dict[name]
+
+    def navToPage(self, xpath):
+        elem = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(
+                (By.XPATH, xpath)))
+        elem.click()
+
+    def navToClickable(self, xpath):
+        elem = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(
+                (By.XPATH, xpath)))
+        print("pagesoure inner: ", elem.get_attribute('innerHTML'))
+        print("pagesoure outer: ", elem.get_attribute('outerHTML'))
+        elem.click()

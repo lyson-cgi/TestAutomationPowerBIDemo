@@ -5,6 +5,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
 from dotenv import load_dotenv
+import webbrowser
 
 driver = None
 userLoggedIn = False
@@ -37,20 +38,19 @@ def setup(request):
         #driver.get("https://app.powerbi.com/groups/4af14a54-e4b2-46c3-83ab-ea11cc636a7a/reports/37d98bec-e44a-46c5-8096-3a83d4ed1e99/ReportSection0fe5bb62de4b8ad15778")
         driver.get(POWERBI_URL)
 
+        if browser_name == "chrome" or browser_name=='firefox':
+            print("Sign In with Two Factor Authentication")
 
-        print("Sign In with Two Factor Authentication")
-
-        element = WebDriverWait(driver, 30).until(EC.presence_of_element_located(
+            element = WebDriverWait(driver, 30).until(EC.presence_of_element_located(
                 (By.XPATH, "//*[@id='mainContent']/section[1]/div[3]/div/a")))
-        element.click() # Power BI SIGN IN button
-        time.sleep(3)  # give user time to response on phone
+            element.click() # Power BI SIGN IN button
+            time.sleep(3)  # give user time to response on phone
 
-        driver.find_element_by_name("loginfmt").send_keys("ly-son.le@cgi.com")
-        time.sleep(1)
-        driver.find_element_by_id("idSIButton9").click()  # Next button
+            driver.find_element_by_name("loginfmt").send_keys("ly-son.le@cgi.com")
+            time.sleep(1)
+            driver.find_element_by_id("idSIButton9").click()  # Next button
 
-        time.sleep(25)  # give user time to response on phone
-
+        time.sleep(30)  # give user time to response on phone
 
         #WebDriverWait(driver, 15).until(EC.presence_of_element_located(
         #        (By.ID, "idSIButton9"))).click()  # Yes button
@@ -66,3 +66,4 @@ def setup(request):
     print("Yield Ended")
 
     driver.close()
+    webbrowser.open('file://' + os.path.realpath("C:\\Users\\Ly-sonLe\\Documents\\Github.com\\TestAutomationPowerBI\\Report.html"))
